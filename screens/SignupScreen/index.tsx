@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpValidationSchema } from "../../utils/ValidationSchema";
 import Footer from "../../components/Footer";
-import { AuthHeaderText } from "../../components/Header";
+import { AuthHeaderText } from "@/components/header/Header";
 import {
   FormInput,
   FormPasswordInput,
