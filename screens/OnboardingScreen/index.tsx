@@ -1,17 +1,8 @@
-import { View, Text, Image, ImageBackground, StyleSheet } from "react-native";
-import desertImage from "../../assets/images/caravan.jpg";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import caravanBackgroundImage from "../../assets/images/caravan.jpg";
 import { Button } from "@/components/button/Buttons";
 import Footer from "@/components/Footer";
-import { Colors } from "@/constants/Colors";
-// import { Button } from "@/components/Button";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useRouter } from "expo-router";
-// import { AuthStackParamList } from "../../navigation/AuthNavigation";
-
-// type OnBoardingScreenProps = NativeStackScreenProps<
-//   // AuthStackParamList,
-//   "OnBoarding"
-// >;
 
 const OnboardingScreen = () => {
   const router = useRouter();
@@ -19,7 +10,7 @@ const OnboardingScreen = () => {
     <>
       <View style={styles.container}>
         <ImageBackground
-          source={desertImage}
+          source={caravanBackgroundImage}
           resizeMode="cover"
           style={styles.container}
         >
