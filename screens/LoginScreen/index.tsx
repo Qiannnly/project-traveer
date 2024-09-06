@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidationSchema } from "@/utils/ValidationSchema";
 import Footer from "@/components/Footer";
-import { AuthHeaderText } from "@/components/Header";
+import { AuthHeaderText } from "@/components/header/Header";
 import { FormEmailInput, FormPasswordInput } from "@/components/FormInput";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -42,7 +42,7 @@ const LoginScreen = () => {
   //   const { email, hashedPassword } = data;
 
   //   try {
-  //     axios.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/register`, {
+  //     axios.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/login`, {
   //       email,
   //       hashedPassword,
   //     });
