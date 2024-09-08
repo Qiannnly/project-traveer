@@ -5,7 +5,7 @@ import useLoadCategories from "@/hooks/useLoadCategories";
 
 const CategoriesList = () => {
   const { tripCategories } = useLoadCategories();
-  const [selectedCategory, setSelectedCategory] = useState("");
+
   return (
     <>
       <View>
@@ -17,12 +17,7 @@ const CategoriesList = () => {
           data={tripCategories}
           style={styles.categoryContainer}
           renderItem={({ item, index }) => (
-            <Category
-              key={index}
-              category={item}
-              setSelectedCategory={setSelectedCategory}
-              selectedCategory={selectedCategory}
-            />
+            <Category key={index} category={item} />
           )}
         />
       </View>
