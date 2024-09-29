@@ -2,24 +2,24 @@ import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
-  ScrollView,
   TouchableOpacity,
+  Text,
 } from "react-native";
 import { useState } from "react";
-import { Button } from "@/components/button/Buttons";
-import { useForm } from "react-hook-form";
+import { AuthHeaderText } from "@/components/header/Header";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpValidationSchema } from "../../utils/ValidationSchema";
 import Footer from "../../components/Footer";
-import { AuthHeaderText } from "@/components/header/Header";
-import {
-  FormInput,
-  FormPasswordInput,
-  FormEmailInput,
-} from "../../components/FormInput";
-import { router } from "expo-router";
+import { Button } from "@/components/button/Buttons";
 import axios from "axios";
+import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 
 type FormValues = {
   firstName: string;
@@ -32,7 +32,7 @@ const SignupScreen = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -61,49 +61,97 @@ const SignupScreen = () => {
   };
   return (
     <KeyboardAvoidingView keyboardVerticalOffset={150} style={styles.container}>
-      <ScrollView style={styles.formContainer}>
+      <GestureHandlerRootView style={styles.formContainer}>
         <AuthHeaderText text="Register" />
 
         <View style={styles.textInputContainer}>
-          <FormInput
-            placeholder="First name"
+          <Controller
             name="firstName"
-            register={register}
-            errors={errors.firstName?.message}
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                placeholder="First name"
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
           />
-
-          <FormInput
-            placeholder="Last name"
-            name="lastName"
-            register={register}
-          />
-
-          <FormEmailInput
-            errors={errors.email?.message}
-            placeholder="Email"
-            name="email"
-            register={register}
-          />
+          {
+            <Text style={styles.errorText}>
+              {errors.firstName && errors.firstName.message}
+            </Text>
+          }
 
           <View>
-            <FormPasswordInput
-              errors={errors.hashedPassword?.message}
-              placeholder="Password"
-              name="hashedPassword"
-              register={register}
-              isPasswordShown={isPasswordShown}
-            />
-
-            <TouchableOpacity
-              style={styles.icon}
-              onPress={() => setIsPasswordShown(!isPasswordShown)}
-            >
-              {isPasswordShown ? (
-                <Ionicons name="eye-off-outline" size={24} color="black" />
-              ) : (
-                <Ionicons name="eye-outline" size={24} color="black" />
+            <Controller
+              name="lastName"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  placeholder="Last name"
+                  onChangeText={onChange}
+                  value={value}
+                  style={[styles.input, styles.normalInput]}
+                />
               )}
-            </TouchableOpacity>
+            />
+            {
+              <Text style={styles.errorText}>
+                {errors.lastName && errors.lastName.message}
+              </Text>
+            }
+            <Controller
+              name="email"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  placeholder="Email"
+                  onChangeText={onChange}
+                  value={value}
+                  style={[styles.input, styles.normalInput]}
+                />
+              )}
+            />
+            {
+              <Text style={styles.errorText}>
+                {errors.email && errors.email.message}
+              </Text>
+            }
+            <View>
+              <Controller
+                name="hashedPassword"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    placeholder="Password"
+                    onChangeText={onChange}
+                    value={value}
+                    style={[styles.input, styles.normalInput]}
+                    secureTextEntry={isPasswordShown}
+                  />
+                )}
+              />
+              {
+                <Text style={styles.errorText}>
+                  {errors.hashedPassword && errors.hashedPassword.message}
+                </Text>
+              }
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => setIsPasswordShown(!isPasswordShown)}
+              >
+                {isPasswordShown ? (
+                  <Ionicons name="eye-off-outline" size={24} color="black" />
+                ) : (
+                  <Ionicons name="eye-outline" size={24} color="black" />
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -113,7 +161,7 @@ const SignupScreen = () => {
           onPress={() => router.push("/(routes)/login")}
         />
         <Button onPress={handleSubmit(onSubmit)}>Sign Up</Button>
-      </ScrollView>
+      </GestureHandlerRootView>
     </KeyboardAvoidingView>
   );
 };
@@ -137,16 +185,26 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     marginTop: 5,
   },
-  input: {
-    marginHorizontal: 50,
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 50,
-    paddingLeft: 10,
-  },
+
   icon: {
     position: "absolute",
     top: 15,
     right: 60,
+  },
+  input: {
+    marginHorizontal: 50,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+    marginBottom: 5,
+  },
+  normalInput: {
+    height: 50,
+  },
+
+  errorText: {
+    marginBottom: 4,
+    color: "red",
+    marginHorizontal: 50,
   },
 });
