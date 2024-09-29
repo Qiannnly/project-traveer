@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
-import caravanBackgroundImage from "../../assets/images/caravan.jpg";
+import caravanBackgroundImage from "../../assets/images/compass.png";
 import { Button } from "@/components/button/Buttons";
 import Footer from "@/components/Footer";
 import { useRouter } from "expo-router";
@@ -15,9 +15,7 @@ const OnboardingScreen = () => {
           style={styles.container}
         >
           <View style={[styles.container, styles.primaryContainer]}>
-            <Text style={styles.text} numberOfLines={2}>
-              Travel Keepsakes
-            </Text>
+            <Text style={styles.text}>TRAVEER</Text>
 
             <View style={styles.secondaryContainer}>
               <Button
@@ -47,16 +45,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   primaryContainer: {
-    justifyContent: "center",
-    marginBottom: 64,
-    gap: 80,
+    justifyContent: "space-around",
   },
   text: {
     color: "black",
-    paddingHorizontal: 40,
-    fontFamily: "poppins-medium",
-    fontSize: 45,
+    fontFamily: "poppins-bold",
+    fontSize: 38,
     textAlign: "center",
+    marginBottom: 64,
   },
   secondaryContainer: {
     gap: 12,
