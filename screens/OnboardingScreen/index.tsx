@@ -1,7 +1,7 @@
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
-import caravanBackgroundImage from "../../assets/images/compass.png";
+import compass from "../../assets/images/compass.png";
 import { Button } from "@/components/button/Buttons";
-import Footer from "@/components/Footer";
+import Footer from "@/components/footer/Footer";
 import { useRouter } from "expo-router";
 
 const OnboardingScreen = () => {
@@ -10,7 +10,7 @@ const OnboardingScreen = () => {
     <>
       <View style={styles.container}>
         <ImageBackground
-          source={caravanBackgroundImage}
+          source={compass}
           resizeMode="cover"
           style={styles.container}
         >
