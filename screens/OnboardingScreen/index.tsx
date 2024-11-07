@@ -1,7 +1,7 @@
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import compass from "../../assets/images/compass.png";
 import { Button } from "@/components/button/Buttons";
-import Footer from "@/components/footer/Footer";
+import { Footer } from "@/components/footer/Footer";
 import { useRouter } from "expo-router";
 
 const OnboardingScreen = () => {
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "black",
-    fontFamily: "poppins-bold",
-    fontSize: 38,
+    fontWeight: "bold",
+    fontSize: 52,
     textAlign: "center",
-    marginBottom: 64,
+    marginBottom: 80,
   },
   secondaryContainer: {
     gap: 12,
