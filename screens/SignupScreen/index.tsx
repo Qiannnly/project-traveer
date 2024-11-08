@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -5,15 +6,15 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import { useState } from "react";
+import { router } from "expo-router";
+
+import axios from "axios";
 import { AuthHeaderText } from "@/components/header/Header";
+import { Footer } from "@/components/footer/Footer";
+import { Button } from "@/components/button/Buttons";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpValidationSchema } from "../../utils/ValidationSchema";
-import Footer from "../../components/Footer";
-import { Button } from "@/components/button/Buttons";
-import axios from "axios";
-import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   GestureHandlerRootView,
@@ -49,12 +50,31 @@ const SignupScreen = () => {
     const { firstName, lastName, email, hashedPassword } = data;
 
     try {
-      axios.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/register`, {
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
+      const data = await axios.post(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/register`,
+        {
+          firstName,
+          lastName,
+          email,
+          hashedPassword,
+        }
+      );
+      Toast.show({
+        type: "success",
+        text1: "Registered successfully!",
+        visibilityTime: 2000,
       });
+      setTimeout(() => {
+        return router.push("/(routes)/login");
+      }, 2500);
+      const status = data.data.status;
+      if (status === "400") {
+        Toast.show({
+          type: "error",
+          text1: "Oops, email is already registered",
+          visibilityTime: 3000,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -72,6 +92,7 @@ const SignupScreen = () => {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 placeholder="First name"
+                placeholderTextColor="grey"
                 onChangeText={onChange}
                 value={value}
                 style={[styles.input, styles.normalInput]}
@@ -92,6 +113,7 @@ const SignupScreen = () => {
               render={({ field: { onChange, value } }) => (
                 <TextInput
                   placeholder="Last name"
+                  placeholderTextColor="grey"
                   onChangeText={onChange}
                   value={value}
                   style={[styles.input, styles.normalInput]}
@@ -110,6 +132,7 @@ const SignupScreen = () => {
               render={({ field: { onChange, value } }) => (
                 <TextInput
                   placeholder="Email"
+                  placeholderTextColor="grey"
                   onChangeText={onChange}
                   value={value}
                   style={[styles.input, styles.normalInput]}
@@ -129,6 +152,7 @@ const SignupScreen = () => {
                 render={({ field: { onChange, value } }) => (
                   <TextInput
                     placeholder="Password"
+                    placeholderTextColor="grey"
                     onChangeText={onChange}
                     value={value}
                     style={[styles.input, styles.normalInput]}
