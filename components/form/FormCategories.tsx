@@ -1,11 +1,4 @@
-import React, { useState } from "react";
-import {
-  FlatList,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import useLoadCategories from "@/hooks/useLoadCategories";
 
 type FormCategoriesProps = {
@@ -34,30 +27,22 @@ const FormCategories = ({
   return (
     <>
       <View style={styles.categoryContainer}>
-        {tripCategories &&
-          tripCategories.map((category: { id: string; title: string }) => {
-            const { id, title } = category;
-            return (
-              <>
-                <View key={id}>
-                  <TouchableOpacity
-                    onPress={() => handleOnLongPress(title)}
-                    style={getSelected(title) && styles.selectedList}
-                    key={id}
-                  >
-                    <Text
-                      style={[
-                        styles.text,
-                        getSelected(title) && styles.selectedText,
-                      ]}
-                    >
-                      {title}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            );
-          })}
+        {tripCategories.map((category) => {
+          const { id, name } = category;
+          return (
+            <TouchableOpacity
+              key={id}
+              onPress={() => handleOnLongPress(name)}
+              style={getSelected(name) && styles.selectedList}
+            >
+              <Text
+                style={[styles.text, getSelected(name) && styles.selectedText]}
+              >
+                {name}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </>
   );
@@ -70,11 +55,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 20,
     overflow: "hidden",
-    paddingTop: 5,
+    paddingTop: 20,
     marginHorizontal: 20,
     paddingBottom: 40,
+
     justifyContent: "center",
     alignItems: "center",
   },
@@ -83,7 +69,7 @@ const styles = StyleSheet.create({
     color: "black",
     borderRadius: 8,
     paddingVertical: 8,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     borderWidth: 0.5,
   },
   selectedList: {
