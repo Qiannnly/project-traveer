@@ -1,4 +1,10 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { GestureResponderEvent } from "react-native";
 
 type FooterProps = {
@@ -7,7 +13,12 @@ type FooterProps = {
   onPress: (event: GestureResponderEvent) => void;
 };
 
-const Footer = ({ firstText, secondText, onPress }: FooterProps) => {
+type FooterFormProps = {
+  onPress: () => void;
+  children: React.ReactNode;
+};
+
+export const Footer = ({ firstText, secondText, onPress }: FooterProps) => {
   return (
     <>
       <View style={styles.footer}>
@@ -22,7 +33,17 @@ const Footer = ({ firstText, secondText, onPress }: FooterProps) => {
   );
 };
 
-export default Footer;
+export const FooterFormText = ({ onPress, children }: FooterFormProps) => {
+  return (
+    <>
+      <TouchableOpacity onPress={onPress}>
+        <Text style={[styles.text, styles.destinationFooter]}>
+          Delete {children}
+        </Text>
+      </TouchableOpacity>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   footer: {
@@ -37,8 +58,16 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: "poppins-medium",
     fontSize: 16,
+    textAlign: "center",
   },
   loginText: {
+    textDecorationLine: "underline",
+  },
+  destinationFooter: {
+    fontSize: 14,
+    marginTop: 20,
+    marginBottom: 64,
+
     textDecorationLine: "underline",
   },
 });
