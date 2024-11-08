@@ -1,8 +1,15 @@
 import CalendarPicker, { ChangedDate } from "react-native-calendar-picker";
+import dayjs from "dayjs";
 
 type FormCalendarProps = {
-  setStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  setEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  setStartDate: React.Dispatch<React.SetStateAction<string>>;
+  setEndDate: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const convertCalendarDateToString = (date: Date) => {
+  const newDate = date.toString();
+  const dateWithDayjs = dayjs(newDate);
+  return dateWithDayjs.format("YYYY-MM-DD");
 };
 
 const FormCalendar = ({ setStartDate, setEndDate }: FormCalendarProps) => {
@@ -11,13 +18,16 @@ const FormCalendar = ({ setStartDate, setEndDate }: FormCalendarProps) => {
   const onDateChange = (date: Date, type: ChangedDate) => {
     if (type === "END_DATE") {
       if (date) {
-        setEndDate(date);
+        const convertedDate = convertCalendarDateToString(date);
+        setEndDate(convertedDate);
         return;
       }
-      setEndDate(undefined);
+      setEndDate("");
     } else {
-      setStartDate(date);
-      setEndDate(date);
+      const convertedDate = convertCalendarDateToString(date);
+      setStartDate(convertedDate);
+
+      setEndDate(convertedDate);
     }
   };
 
