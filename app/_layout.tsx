@@ -1,37 +1,88 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
+import UserProvider from "@/context/UserProvider";
+import * as Location from "expo-location";
+import { UserLocationContext } from "@/context/UserLocationContext";
+import Toast, {
+  BaseToast,
+  BaseToastProps,
+  ErrorToast,
+} from "react-native-toast-message";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
+export type CoordinatesTypes = {
+  lat: number;
+  lng: number;
+};
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [userLocation, setUserLocation] = useState<CoordinatesTypes>({
+    lat: 0,
+    lng: 0,
+  });
+
+  const toastConfig = {
+    success: (props: BaseToastProps) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: "green" }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+        }}
+      />
+    ),
+
+    error: (props: BaseToastProps) => (
+      <ErrorToast
+        {...props}
+        style={{ borderLeftColor: "red" }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+        }}
+      />
+    ),
+  };
+
+  useFonts({
+    poppins: require("../assets/fonts/Poppins-Regular.ttf"),
+    "poppins-medium": require("../assets/fonts/Poppins-Medium.ttf"),
+    "poppins-bold": require("../assets/fonts/Poppins-Bold.ttf"),
   });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    getUserCurrentLocation();
+  }, []);
 
-  if (!loaded) {
-    return null;
-  }
+  const getUserCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+      distanceInterval: 1,
+    });
+    const lat = location.coords.latitude;
+    const lng = location.coords.longitude;
+
+    setUserLocation({ lat, lng });
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <>
+      <UserLocationContext.Provider value={{ userLocation }}>
+        <UserProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(routes)/onboarding/index" />
+            <Stack.Screen name="(routes)/login/index" />
+            <Stack.Screen name="(routes)/register/index" />
+          </Stack>
+          <Toast config={toastConfig} />
+        </UserProvider>
+      </UserLocationContext.Provider>
+    </>
   );
 }
