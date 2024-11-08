@@ -16,7 +16,7 @@ export default FormText;
 
 const styles = StyleSheet.create({
   text: {
-    marginHorizontal: 50,
+    marginHorizontal: 30,
     marginBottom: 2,
     marginTop: 5,
     fontFamily: "poppins-medium",
