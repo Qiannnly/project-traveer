@@ -1,37 +1,56 @@
 import { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { View, FlatList, StyleSheet } from "react-native";
-import { useNavigation } from "expo-router";
 import axios from "axios";
 import { TripListTypes } from "@/types/global";
-import Trip from "@/components/Trip";
-import Empty from "@/components/Empty";
+import Trip from "@/components/trip/Trip";
+import Empty from "@/components/trip/Empty";
+import { useAuthState } from "@/context/UserProvider";
 
 const TripCategoryScreen = () => {
   const [selectedTrips, setSelectedTrips] = useState<TripListTypes[]>([]);
+
+  const { user } = useAuthState();
   const navigation = useNavigation();
+
   const { title } = useLocalSearchParams();
 
-  // const userId = 1;
+  const userId = user?.id;
 
-  const getSelectedCategory = async (title: string | string[]) => {
-    // const { data } = await axios.get(
-    //   `${process.env.EXPO_PUBLIC_BACKEND_URL}/categories/${title}?user=${userId}`
-    // );
-    // setSelectedTrips(data);
-    // setSelectedTrips(data)
+  useEffect(() => {
+    if (userId && title) {
+      getSelectedCategory(userId, title);
+    } else if (userId && !title) {
+      getAllCategories(userId);
+    }
+  }, [title, userId]);
+
+  const getSelectedCategory = async (
+    userId: string,
+    title: string | string[]
+  ) => {
+    const { data } = await axios.get(
+      `${process.env.EXPO_PUBLIC_BACKEND_URL}/users/${userId}/trips/search?q=${title}`
+    );
+    setSelectedTrips(data);
   };
 
-  // useEffect(() => {
-  //   if (title) {
-  //     getSelectedCategory(title);
-  //   }
-  // }, [title]);
+  const getAllCategories = async (userId: string) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/users/${userId}/trips`
+      );
+      const trips = data.data;
+      setSelectedTrips(trips);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      headerTitle: title,
+      headerTitle: title ? title : "All Trips",
       headerBackTitle: "Home",
     });
   }, [title]);
@@ -43,7 +62,7 @@ const TripCategoryScreen = () => {
           keyExtractor={(item) => item.id}
           style={styles.tripContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => <Trip key={index} trip={item} />}
+          renderItem={({ item }) => <Trip trip={item} />}
           ListEmptyComponent={() => <Empty />}
         />
       </View>
