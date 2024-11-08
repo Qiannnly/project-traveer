@@ -1,35 +1,51 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+import { useAuthState } from "@/context/UserProvider";
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        tabBarShowLabel: false,
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome
+              name="home"
+              size={28}
+              color={focused ? "#A67B5B" : "black"}
+            />
           ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="createTrip/index"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome
+              name="plus"
+              size={28}
+              color={focused ? "#A67B5B" : "black"}
+            />
           ),
+          headerTitle: "Create a Trip",
+        }}
+      />
+      <Tabs.Screen
+        name="profile/index"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome
+              name="user"
+              size={28}
+              color={focused ? "#A67B5B" : "black"}
+            />
+          ),
+          headerShown: false,
         }}
       />
     </Tabs>
