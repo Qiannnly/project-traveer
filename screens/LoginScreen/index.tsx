@@ -1,22 +1,26 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
   Pressable,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import axios from "axios";
+import { AuthHeaderText } from "@/components/header/Header";
 import { Button } from "@/components/button/Buttons";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidationSchema } from "@/utils/ValidationSchema";
-import Footer from "@/components/Footer";
-import { AuthHeaderText } from "@/components/header/Header";
-import { FormEmailInput, FormPasswordInput } from "@/components/FormInput";
+import { Footer } from "@/components/footer/Footer";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Entypo from "@expo/vector-icons/Entypo";
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from "react-native-gesture-handler";
+import { useAuthState } from "@/context/UserProvider";
+import Toast from "react-native-toast-message";
 
 type FormValues = {
   email: string;
@@ -26,8 +30,10 @@ type FormValues = {
 const LoginScreen = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
+  const { logIn } = useAuthState();
+
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -38,27 +44,32 @@ const LoginScreen = () => {
     },
   });
 
-  // const onSubmit = async (data: FormValues) => {
-  //   const { email, hashedPassword } = data;
-
-  //   try {
-  //     axios.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/login`, {
-  //       email,
-  //       hashedPassword,
-  //     });
-  //     router.push("/(tabs)/home");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const onSubmit = (data: FormValues) => {
+    const { email, hashedPassword } = data;
+    try {
+      logIn(email, hashedPassword);
+      Toast.show({
+        type: "success",
+        text1: `Welcome back!`,
+        visibilityTime: 2000,
+      });
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: "Oops, please try again",
+        visibilityTime: 3000,
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.formContainer}>
+      <GestureHandlerRootView style={styles.formContainer}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons
-            name="arrow-back-outline"
-            size={24}
+          <Entypo
+            name="cross"
+            size={36}
             color="black"
             style={styles.backIcon}
           />
@@ -66,21 +77,47 @@ const LoginScreen = () => {
         <AuthHeaderText text="Log In" />
 
         <View style={styles.textInputContainer}>
-          <FormEmailInput
-            errors={errors.email?.message}
-            placeholder="Email"
+          <Controller
             name="email"
-            register={register}
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="grey"
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
           />
+          {
+            <Text style={styles.errorText}>
+              {errors.email && errors.email.message}
+            </Text>
+          }
 
           <View>
-            <FormPasswordInput
-              errors={errors.hashedPassword?.message}
-              placeholder="Password"
+            <Controller
               name="hashedPassword"
-              register={register}
-              isPasswordShown={isPasswordShown}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor="grey"
+                  onChangeText={onChange}
+                  value={value}
+                  style={[styles.input, styles.normalInput]}
+                  secureTextEntry={isPasswordShown}
+                />
+              )}
             />
+            {
+              <Text style={styles.errorText}>
+                {errors.hashedPassword && errors.hashedPassword.message}
+              </Text>
+            }
             <TouchableOpacity
               style={styles.icon}
               onPress={() => setIsPasswordShown(!isPasswordShown)}
@@ -101,10 +138,9 @@ const LoginScreen = () => {
           secondText="Sign Up"
           onPress={() => router.push("/(routes)/register")}
         />
-        <Button onPress={() => router.push("/(tabs)/home")}>Login</Button>
 
-        {/* <Button onPress={handleSubmit(onSubmit)}>Login</Button> */}
-      </ScrollView>
+        <Button onPress={handleSubmit(onSubmit)}>Login</Button>
+      </GestureHandlerRootView>
     </View>
   );
 };
@@ -120,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 70,
   },
-  textInputContainer: { gap: 4 },
+  textInputContainer: { gap: 8 },
   text: {
     marginHorizontal: 50,
     textAlign: "right",
@@ -136,7 +172,22 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     position: "absolute",
-    top: 30,
+    top: 24,
     left: 50,
+  },
+  input: {
+    marginHorizontal: 50,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+    marginBottom: 5,
+  },
+  normalInput: {
+    height: 50,
+  },
+
+  errorText: {
+    color: "red",
+    marginHorizontal: 50,
   },
 });
