@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { useState } from "react";
 import Category from "./Category";
 import useLoadCategories from "@/hooks/useLoadCategories";
 
@@ -10,7 +9,6 @@ const CategoriesList = () => {
     <>
       <View>
         <Text style={styles.categoryTitle}>Categories</Text>
-
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -19,6 +17,7 @@ const CategoriesList = () => {
           renderItem={({ item, index }) => (
             <Category key={index} category={item} />
           )}
+          contentContainerStyle={{ paddingRight: 20 }}
         />
       </View>
     </>
@@ -29,13 +28,13 @@ export default CategoriesList;
 
 const styles = StyleSheet.create({
   categoryTitle: {
-    fontSize: 18,
-    marginHorizontal: 26,
+    fontSize: 24,
     marginTop: 30,
+    paddingHorizontal: 18,
     fontFamily: "poppins-bold",
   },
   categoryContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     marginTop: 10,
     gap: 25,
   },
