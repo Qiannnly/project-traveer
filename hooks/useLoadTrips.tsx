@@ -1,21 +1,39 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { tripList } from "@/standby/data"; // to remove with axios
 import { TripListTypes } from "@/types/global";
+import { useAuthState } from "@/context/UserProvider";
 
 const useLoadTrips = () => {
-  const [trips, setTrips] = useState<TripListTypes[]>();
+  const [trips, setTrips] = useState<TripListTypes[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuthState();
 
-  // const userID = 1
+  const userId = user?.id;
   useEffect(() => {
     const fetchTrips = async () => {
-      // const { data } = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_URL}/trips?user=userId`);
-      // setTrips(data);
-      setTrips(tripList);
+      setIsLoading(true);
+
+      setTimeout(async () => {
+        try {
+          if (userId) {
+            const { data } = await axios.get(
+              `${process.env.EXPO_PUBLIC_BACKEND_URL}/users/${userId}/limitedTrips`
+            );
+            const userTrips = data.data;
+            setIsLoading(false);
+
+            setTrips(userTrips);
+          }
+        } catch (err) {
+          console.log(err);
+          setIsLoading(false);
+        }
+      }, 2000);
     };
+
     fetchTrips();
-  }, []);
-  return { trips };
+  }, [userId]);
+  return { trips, isLoading };
 };
 
 export default useLoadTrips;
