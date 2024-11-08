@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { categories } from "@/standby/data"; // to remove with axios
 import { CategoryTypes } from "@/types/global";
+import axios from "axios";
 
 const useLoadCategories = () => {
-  const [tripCategories, setTripCategories] = useState<CategoryTypes[]>();
+  const [tripCategories, setTripCategories] = useState<CategoryTypes[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      // const { data } = await axios.get(`${process.env.EXPO_PUBLIC_BACKEND_URL}/categories`);
-      setTripCategories(categories);
+      const { data } = await axios.get(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/categories`
+      );
+      setTripCategories(data);
     };
     fetchCategories();
   }, []);
