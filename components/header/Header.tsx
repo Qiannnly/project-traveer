@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginTop: 56,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "600",
     fontFamily: "poppins-bold",
     textAlign: "center",
