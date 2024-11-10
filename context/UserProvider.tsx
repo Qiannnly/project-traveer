@@ -11,6 +11,7 @@ import { User } from "@/types/global";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 type UserProviderProps = {
   children: ReactNode;
@@ -39,24 +40,34 @@ const UserProvider = ({ children }: UserProviderProps) => {
     } else if (user) {
       router.replace("/(tabs)/home");
     }
-  }, [user]);
+  }, [user, router]);
 
   const logIn = async (email: string, hashedPassword: string) => {
     try {
-      await axios
-        .post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/login`, {
+      const res = await axios.post(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/login`,
+        {
           email,
           hashedPassword,
-        })
-        .then(async (res) => {
-          if (res.data.status === "Ok") {
-            const token = res.data.data;
-            const userToken = await AsyncStorage.setItem("userToken", token);
-            if (userToken !== null) {
-              getData();
-            }
-          }
+        }
+      );
+      if (res.data.status === "Ok") {
+        const token = res.data.data;
+        await AsyncStorage.setItem("userToken", token);
+
+        await getData();
+        Toast.show({
+          type: "success",
+          text1: "Welcome back!",
+          visibilityTime: 3000,
         });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Oops, login failed. Please try again",
+          visibilityTime: 3000,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -65,19 +76,16 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const getData = async () => {
     try {
       const userToken = await AsyncStorage.getItem("userToken");
-
-      if (userToken !== null) {
-        await axios
-          .post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/user`, {
+      if (userToken) {
+        const res = await axios.post(
+          `${process.env.EXPO_PUBLIC_BACKEND_URL}/user`,
+          {
             token: userToken,
-          })
-          .then(async (res) => {
-            const userData = res.data.data;
-            const token = res.data.token;
-            const { id, firstName, lastName, email } = userData;
+          }
+        );
+        const { id, firstName, lastName, email, token } = res.data.data;
 
-            setUser({ id, email, firstName, lastName, userToken: token });
-          });
+        setUser({ id, email, firstName, lastName, userToken: token });
       } else {
         setUser(null);
       }
