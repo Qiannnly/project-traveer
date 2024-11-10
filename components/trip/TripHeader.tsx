@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
 
   tripText: {
     fontFamily: "poppins-bold",
-    fontSize: 24,
+    fontSize: 18,
   },
   text: {
     color: "#800080",
-    fontSize: 20,
+    fontSize: 18,
   },
 });
