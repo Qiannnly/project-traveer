@@ -5,21 +5,25 @@ import useLoadTrips from "@/hooks/useLoadTrips";
 import SkeletonLoader from "../loader/SkeletonLoader";
 
 const TripList = () => {
-  const { trips, isLoading } = useLoadTrips();
+  const { trips, isLoading, reloadTrips } = useLoadTrips();
 
-  if (isLoading && trips.length === 0) {
+  if (isLoading) {
     return <SkeletonLoader />;
   }
 
-  return (
+  return trips.length === 0 ? (
+    <Empty />
+  ) : (
     <View style={styles.container}>
       <FlatList
         data={trips}
         keyExtractor={(item) => item.id.toString()}
         style={styles.tripContainer}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <Trip trip={item} />}
-        ListEmptyComponent={<Empty />}
+        renderItem={({ item }) => (
+          <Trip trip={item} reloadTrips={reloadTrips} />
+        )}
+        // ListEmptyComponent={<Empty />}
       />
     </View>
   );
