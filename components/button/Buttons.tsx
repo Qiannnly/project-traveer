@@ -1,11 +1,15 @@
 import { ReactNode } from "react";
 import {
+  Dimensions,
   GestureResponderEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+
+const { width } = Dimensions.get("window");
+const buttonWidth = width * 0.8;
 
 type ButtonProps = {
   children?: ReactNode;
@@ -19,18 +23,11 @@ type LogoutButtonProps = {
 export const Button = ({ children, onPress }: ButtonProps) => {
   return (
     <>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
+      <TouchableOpacity
+        style={[styles.button, { width: buttonWidth }]}
+        onPress={onPress}
+      >
         <Text style={styles.text}>{children}</Text>
-      </TouchableOpacity>
-    </>
-  );
-};
-
-export const LogoutButton = ({ onPress }: LogoutButtonProps) => {
-  return (
-    <>
-      <TouchableOpacity style={styles.logoutButton} onPress={onPress}>
-        <AntDesign name="logout" size={30} color="black" />
       </TouchableOpacity>
     </>
   );
@@ -50,10 +47,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     fontFamily: "poppins-medium",
-  },
-  logoutButton: {
-    position: "absolute",
-    right: 60,
-    top: 100,
   },
 });
