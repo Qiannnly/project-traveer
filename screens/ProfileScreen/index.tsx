@@ -68,7 +68,6 @@ const ProfileScreen = () => {
   };
 
   const handleLogout = () => {
-    console.log("pressed");
     logOut();
     router.push({
       pathname: "/(routes)/login",
@@ -118,79 +117,75 @@ const ProfileScreen = () => {
 
   return (
     <>
-      <LogoutButton onPress={handleLogout} />
-
       <View style={styles.backButton}>
         <TouchableOpacity onPress={handleLogout}>
           <AntDesign name="logout" size={24} color="black" />
         </TouchableOpacity>
       </View>
       <GestureHandlerRootView style={styles.container}>
-        <ScrollView>
-          <View style={styles.contactsContainer}>
-            <Text style={styles.profileText}>Profile</Text>
+        <View style={styles.contactsContainer}>
+          <Text style={styles.profileText}>Profile</Text>
 
-            <FormText>First Name</FormText>
-            <Controller
-              name="firstName"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  defaultValue={user?.firstName}
-                  onChangeText={onChange}
-                  value={value}
-                  style={[styles.input, styles.normalInput]}
-                />
-              )}
-            />
+          <FormText>First Name</FormText>
+          <Controller
+            name="firstName"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                defaultValue={user?.firstName}
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
+          />
 
-            <FormText>Last Name</FormText>
-            <Controller
-              name="lastName"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  defaultValue={user?.lastName}
-                  onChangeText={onChange}
-                  value={value}
-                  style={[styles.input, styles.normalInput]}
-                />
-              )}
-            />
-            <FormText>Email</FormText>
-            <Controller
-              name="email"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  onChangeText={onChange}
-                  value={value}
-                  style={[styles.input, styles.normalInput]}
-                />
-              )}
-            />
-            <FormText>Password</FormText>
-            <Controller
-              name="hashedPassword"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  onChangeText={onChange}
-                  value={value}
-                  style={[styles.input, styles.normalInput]}
-                />
-              )}
-            />
-          </View>
-          <Button onPress={handleSubmit(onSubmit)}>Update Profile</Button>
-          {user ? (
-            <FooterFormText onPress={handleAlert}>profile</FooterFormText>
-          ) : null}
-        </ScrollView>
+          <FormText>Last Name</FormText>
+          <Controller
+            name="lastName"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                defaultValue={user?.lastName}
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
+          />
+          <FormText>Email</FormText>
+          <Controller
+            name="email"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
+          />
+          <FormText>Password</FormText>
+          <Controller
+            name="hashedPassword"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={[styles.input, styles.normalInput]}
+              />
+            )}
+          />
+        </View>
+        <Button onPress={handleSubmit(onSubmit)}>Update Profile</Button>
+        {user ? (
+          <FooterFormText onPress={handleAlert}>profile</FooterFormText>
+        ) : null}
       </GestureHandlerRootView>
     </>
   );
@@ -206,12 +201,12 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     zIndex: 90,
-    top: 72,
-    right: 45,
+    top: 54,
+    right: 60,
   },
   profileText: {
     alignSelf: "center",
-    fontSize: 36,
+    fontSize: 30,
     fontFamily: "poppins-bold",
     marginBottom: 24,
   },
@@ -219,7 +214,7 @@ const styles = StyleSheet.create({
   contactsContainer: {
     paddingTop: 96,
     paddingHorizontal: 15,
-    marginBottom: 40,
+    marginBottom: 28,
   },
   updateContainer: {
     paddingHorizontal: 40,
