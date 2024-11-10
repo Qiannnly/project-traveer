@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     alignItems: "center",
-    paddingTop: 60,
+    paddingTop: 20,
   },
   image: {
     resizeMode: "contain",
