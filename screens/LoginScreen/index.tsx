@@ -48,30 +48,20 @@ const LoginScreen = () => {
     const { email, hashedPassword } = data;
     try {
       logIn(email, hashedPassword);
-      Toast.show({
-        type: "success",
-        text1: `Welcome back!`,
-        visibilityTime: 2000,
-      });
     } catch (err) {
       console.log(err);
-      Toast.show({
-        type: "error",
-        text1: "Oops, please try again",
-        visibilityTime: 3000,
-      });
     }
   };
 
   return (
     <View style={styles.container}>
       <GestureHandlerRootView style={styles.formContainer}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.push("/(routes)/onboarding")}>
           <Entypo
             name="cross"
             size={36}
             color="black"
-            style={styles.backIcon}
+            style={styles.cancelIcon}
           />
         </TouchableOpacity>
         <AuthHeaderText text="Log In" />
@@ -170,9 +160,9 @@ const styles = StyleSheet.create({
     top: 15,
     right: 60,
   },
-  backIcon: {
+  cancelIcon: {
     position: "absolute",
-    top: 24,
+    top: 8,
     left: 50,
   },
   input: {
