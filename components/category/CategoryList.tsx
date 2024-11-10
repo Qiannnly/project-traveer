@@ -28,7 +28,7 @@ export default CategoriesList;
 
 const styles = StyleSheet.create({
   categoryTitle: {
-    fontSize: 24,
+    fontSize: 18,
     marginTop: 30,
     paddingHorizontal: 18,
     fontFamily: "poppins-bold",
