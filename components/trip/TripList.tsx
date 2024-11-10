@@ -23,7 +23,6 @@ const TripList = () => {
         renderItem={({ item }) => (
           <Trip trip={item} reloadTrips={reloadTrips} />
         )}
-        // ListEmptyComponent={<Empty />}
       />
     </View>
   );
