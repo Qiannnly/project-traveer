@@ -9,31 +9,37 @@ const useLoadTrips = () => {
   const { user } = useAuthState();
 
   const userId = user?.id;
+
+  const fetchTrips = async () => {
+    setIsLoading(true);
+
+    try {
+      if (userId) {
+        const { data } = await axios.get(
+          `${process.env.EXPO_PUBLIC_BACKEND_URL}/users/${userId}/limitedTrips`
+        );
+        const userTrips = data.data;
+
+        setTrips(userTrips);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+    // setTimeout(() => {
+    //   setIsLoading(false); // Hide loader
+    // }, 500);
+  };
+
   useEffect(() => {
-    const fetchTrips = async () => {
-      setIsLoading(true);
-
-      setTimeout(async () => {
-        try {
-          if (userId) {
-            const { data } = await axios.get(
-              `${process.env.EXPO_PUBLIC_BACKEND_URL}/users/${userId}/limitedTrips`
-            );
-            const userTrips = data.data;
-            setIsLoading(false);
-
-            setTrips(userTrips);
-          }
-        } catch (err) {
-          console.log(err);
-          setIsLoading(false);
-        }
-      }, 2000);
-    };
-
-    fetchTrips();
+    if (userId) {
+      fetchTrips(); // Only fetch trips if userId is available
+    } else {
+      setIsLoading(false);
+    }
   }, [userId]);
-  return { trips, isLoading };
+
+  return { trips, isLoading, reloadTrips: fetchTrips };
 };
 
 export default useLoadTrips;
