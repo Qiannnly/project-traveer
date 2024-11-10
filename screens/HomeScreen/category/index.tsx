@@ -6,10 +6,11 @@ import { TripListTypes } from "@/types/global";
 import Trip from "@/components/trip/Trip";
 import Empty from "@/components/trip/Empty";
 import { useAuthState } from "@/context/UserProvider";
+import useLoadTrips from "@/hooks/useLoadTrips";
 
 const TripCategoryScreen = () => {
   const [selectedTrips, setSelectedTrips] = useState<TripListTypes[]>([]);
-
+  const { reloadTrips } = useLoadTrips();
   const { user } = useAuthState();
   const navigation = useNavigation();
 
@@ -62,7 +63,9 @@ const TripCategoryScreen = () => {
           keyExtractor={(item) => item.id}
           style={styles.tripContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <Trip trip={item} />}
+          renderItem={({ item }) => (
+            <Trip trip={item} reloadTrips={reloadTrips} />
+          )}
           ListEmptyComponent={() => <Empty />}
         />
       </View>
