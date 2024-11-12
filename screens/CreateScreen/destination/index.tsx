@@ -1,6 +1,5 @@
 import { useMemo, useRef, useCallback, useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
-
 import Map from "@/components/destination/Map";
 import {
   BottomSheetModal,
