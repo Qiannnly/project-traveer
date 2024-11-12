@@ -20,7 +20,6 @@ import {
   TextInput,
 } from "react-native-gesture-handler";
 import { useAuthState } from "@/context/UserProvider";
-import Toast from "react-native-toast-message";
 
 type FormValues = {
   email: string;
