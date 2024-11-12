@@ -88,21 +88,17 @@ const ProfileScreen = () => {
   };
 
   const handleAlert = () =>
-    Alert.alert(
-      "Remove Destination",
-      "Are you sure you want to remove destination?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Remove",
-          onPress: handleDelete,
-        },
-      ]
-    );
+    Alert.alert("Delete Profile", "Are you sure you want to delete profile?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Remove",
+        onPress: handleDelete,
+      },
+    ]);
 
   useEffect(() => {
     if (user) {
